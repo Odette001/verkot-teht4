@@ -14,6 +14,11 @@ jobs:
     # setting environment variables, if needed
     env:
       NODE_ENV: development
+      DB_HOST: localhost
+      DB_USER: root
+      DB_PASS: root
+      DB_NAME: cicdtest
+      PORT: 3333
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,7 +32,6 @@ jobs:
     - name: Setup Mysql
       run: |
         sudo systemctl start mysql
-        cp .env.sample .env
         mysql -u root -proot < db/create-db.sql 
     - name: Use Node.js ${{ matrix.node-version }} in ${{env.NODE_ENV}} mode
       uses: actions/setup-node@v4
