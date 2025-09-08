@@ -27,6 +27,8 @@ jobs:
     - name: Setup Mysql
       run: |
         sudo systemctl start mysql
+        sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';"
+        sudo mysql -e "FLUSH PRIVILEGES;"
         mysql -e "CREATE DATABASE IF NOT EXISTS cicdtest;" -u root
         mysql -e "USE cicdtest; CREATE TABLE students (student_id int(11) NOT NULL AUTO_INCREMENT, student_name text NOT NULL, filename text NOT NULL, birthdate date NOT NULL, PRIMARY KEY (student_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;" -u root
     - name: Create .env file
