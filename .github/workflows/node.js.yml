@@ -11,21 +11,37 @@ on:
 
 jobs:
   build:
-
+    # setting environment variables, if needed
+    env:
+      NODE_ENV: development
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [22.x, 24.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup Mysql
+      run: |
+        sudo systemctl start mysql
+        mysql -e "CREATE DATABASE IF NOT EXISTS cicdtest;" -u root
+        mysql -e "USE cicdtest; CREATE TABLE students (student_id int(11) NOT NULL AUTO_INCREMENT, student_name text NOT NULL, filename text NOT NULL, birthdate date NOT NULL, PRIMARY KEY (student_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;" -u root
+    - name: Create .env file
+      run: |
+        echo "DB_HOST=localhost" >> .env
+        echo "DB_USER=root" >> .env
+        echo "DB_PASS=" >> .env
+        echo "DB_NAME=cicdtest" >> .env
+        echo "PORT=3333" >> .env 
+    - name: Use Node.js ${{ matrix.node-version }} in ${{env.NODE_ENV}} mode
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+    - run: ls
     - run: npm run build --if-present
-    - run: npm test
+    - run: npm run test
