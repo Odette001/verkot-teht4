@@ -27,15 +27,15 @@ jobs:
     - name: Setup Mysql
       run: |
         sudo systemctl start mysql
+        sudo mysql -e "CREATE DATABASE IF NOT EXISTS cicdtest;"
+        sudo mysql -e "USE cicdtest; CREATE TABLE students (student_id int(11) NOT NULL AUTO_INCREMENT, student_name text NOT NULL, filename text NOT NULL, birthdate date NOT NULL, PRIMARY KEY (student_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;"
         sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';"
         sudo mysql -e "FLUSH PRIVILEGES;"
-        mysql -e "CREATE DATABASE IF NOT EXISTS cicdtest;" -u root -proot
-        mysql -e "USE cicdtest; CREATE TABLE students (student_id int(11) NOT NULL AUTO_INCREMENT, student_name text NOT NULL, filename text NOT NULL, birthdate date NOT NULL, PRIMARY KEY (student_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;" -u root -proot
     - name: Create .env file
       run: |
         echo "DB_HOST=localhost" >> .env
         echo "DB_USER=root" >> .env
-        echo "DB_PASS=root" >> .env
+        echo "DB_PASS=" >> .env
         echo "DB_NAME=cicdtest" >> .env
         echo "PORT=3333" >> .env 
     - name: Use Node.js ${{ matrix.node-version }} in ${{env.NODE_ENV}} mode

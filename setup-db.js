@@ -19,8 +19,16 @@ async function createDatabase() {
     await connection.execute('CREATE DATABASE cicdtest');
     console.log('Created database cicdtest');
 
-    // Use the database
-    await connection.execute('USE cicdtest');
+    // Close first connection and connect to the database
+    await connection.end();
+
+    // Connect to the specific database
+    const dbConnection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: 'cicdtest'
+    });
 
     // Create students table
     const createTableQuery = `
@@ -33,10 +41,10 @@ async function createDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci
     `;
 
-    await connection.execute(createTableQuery);
+    await dbConnection.execute(createTableQuery);
     console.log('Created students table');
 
-    await connection.end();
+    await dbConnection.end();
     console.log('Database setup completed successfully!');
 
   } catch (error) {
