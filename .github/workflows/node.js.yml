@@ -11,14 +11,14 @@ on:
 
 jobs:
   build:
-    # setting environment variables, if needed
+    # setting environment variables
     env:
       NODE_ENV: development
-      DB_HOST: localhost
-      DB_USER: root
-      DB_PASS: root
-      DB_NAME: cicdtest
-      PORT: 3333
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      PORT: ${{ secrets.PORT }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -42,3 +42,7 @@ jobs:
     - run: ls
     - run: npm run build --if-present
     - run: npm run test
+    # Deployment:
+    - name: Deploy to server
+      run: echo "Deploying..."
+
