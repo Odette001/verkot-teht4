@@ -44,5 +44,6 @@ jobs:
     - run: npm run test
     # Deployment:
     - name: Deploy to server
+      if: success()
       run: echo "Deploying..."
 
