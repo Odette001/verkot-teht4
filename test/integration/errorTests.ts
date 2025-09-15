@@ -1,5 +1,6 @@
 // eslint-disable-next-line node/no-unpublished-import
 import request from 'supertest';
+import expect from 'expect';
 import MessageResponse from '../../src/interfaces/MessageResponse';
 import {PostStudent} from '../../src/interfaces/Student';
 

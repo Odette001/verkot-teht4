@@ -29,20 +29,20 @@ router
   .get(studentListGet)
   .post(
     upload.single('image'),
-    body('student_name').notEmpty().escape(),
-    body('birthdate').isDate(),
+    body('student_name').notEmpty().withMessage('Invalid value').escape(),
+    body('birthdate').isDate().withMessage('Invalid value'),
     studentPost
   );
 
 router
   .route('/:id')
-  .get(param('id'), studentGet)
+  .get(param('id').isInt().withMessage('Invalid value: id'), studentGet)
   .put(
-    param('id'),
+    param('id').isInt().withMessage('Invalid value: id'),
     body('student_name').escape().optional(),
     body('birthdate').isDate().optional(),
     studentPut
   )
-  .delete(param('id'), studentDelete);
+  .delete(param('id').isInt().withMessage('Invalid value: id'), studentDelete);
 
 export default router;
