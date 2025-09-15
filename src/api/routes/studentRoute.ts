@@ -36,13 +36,13 @@ router
 
 router
   .route('/:id')
-  .get(param('id').isInt().withMessage('Invalid value: id'), studentGet)
+  .get(param('id').isInt().withMessage('Invalid value'), studentGet)
   .put(
-    param('id').isInt().withMessage('Invalid value: id'),
-    body('student_name').escape().optional(),
-    body('birthdate').isDate().optional(),
+    param('id').isInt().withMessage('Invalid value'),
+    body('student_name').notEmpty().withMessage('Invalid value').escape().optional(),
+    body('birthdate').isDate().withMessage('Invalid value').optional(),
     studentPut
   )
-  .delete(param('id').isInt().withMessage('Invalid value: id'), studentDelete);
+  .delete(param('id').isInt().withMessage('Invalid value'), studentDelete);
 
 export default router;
