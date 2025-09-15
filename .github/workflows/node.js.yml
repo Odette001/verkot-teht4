@@ -32,7 +32,8 @@ jobs:
     - name: Setup Mysql
       run: |
         sudo systemctl start mysql
-        mysql -u root -proot < db/create-db.sql 
+        mysql -u root -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${{ secrets.DB_PASS }}'; FLUSH PRIVILEGES;"
+        mysql -u root -p${{ secrets.DB_PASS }} < db/create-db.sql 
     - name: Use Node.js ${{ matrix.node-version }} in ${{env.NODE_ENV}} mode
       uses: actions/setup-node@v4
       with:
