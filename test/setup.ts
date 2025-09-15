@@ -2,13 +2,24 @@ import 'dotenv/config';
 
 // Set test environment variables
 process.env.NODE_ENV = 'test';
-process.env.DB_HOST = process.env.DB_HOST || 'localhost';
-process.env.DB_USER = process.env.DB_USER || 'root';
-process.env.DB_PASS = process.env.DB_PASS || '';
-process.env.DB_NAME = process.env.DB_NAME || 'cicdtest';
-process.env.PORT = process.env.PORT || '3333';
+
+// For local testing, use the .env file values or defaults
+const dbHost = process.env.DB_HOST || 'localhost';
+const dbUser = process.env.DB_USER || 'root';
+const dbPass = process.env.DB_PASS || '';
+const dbName = process.env.DB_NAME || 'cicdtest';
+const port = process.env.PORT || '3333';
+
+// Assign back to process.env to ensure they're available
+process.env.DB_HOST = dbHost;
+process.env.DB_USER = dbUser;
+process.env.DB_PASS = dbPass;
+process.env.DB_NAME = dbName;
+process.env.PORT = port;
 
 console.log('Test environment setup completed');
-console.log('Database:', process.env.DB_NAME);
-console.log('Host:', process.env.DB_HOST);
-console.log('User:', process.env.DB_USER);
+console.log('Database:', dbName);
+console.log('Host:', dbHost);
+console.log('User:', dbUser);
+console.log('Password length:', dbPass.length);
+console.log('NODE_ENV:', process.env.NODE_ENV);
